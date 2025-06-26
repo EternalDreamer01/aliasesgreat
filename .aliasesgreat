@@ -136,6 +136,9 @@ alias emulator-wipe-data='sh -c '\''emulator -avd "$1" -wipe-data'\'' _'
 alias adbpush='sh -c '\''adb push $1 ${2:-/sdcard/Pictures/}'\'' _'
 alias layout='setxkbmap -print | grep keycodes | sed -E "s/.+\((.+)\).+/\1/mg"'
 alias schown='sudo chown -R $USER:$USER'
+alias pipup='pip install -U'
+alias pipir='pip install -r'
+alias pipxup='pipx install -U'
 alias pipxir='pipx runpip cookiecutter install -r'
 cdd() { mkdir -p "$1" && cd "$1"; }
 
