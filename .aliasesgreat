@@ -1,3 +1,13 @@
+
+__alias_regex_replace() {
+	sed -E 's/\$\((git remote show)\)/$(grs)/g;
+		s/\$\((git branch --show-current)\)/$(gbc)/g; 
+		s/\$\((git rev-list --all)\)/$(grl)/g'
+}
+__alias_regex_beautify() {
+	column -s = -t -l 2 | sed -E "s/([a-z0-9-]+\s+){0,1}'{0,1}(sh -c '\\\\''){0,1}(.+)/\x1b[1;36m\1\x1b[0m\3/ig; s/('\\\\'' _){0,1}'{0,1}$//g"
+}
+
 # Node
 alias start='npm start'
 alias dev='npm run dev'
@@ -14,7 +24,7 @@ alias npup='npx npm-check-updates'
 alias npxup='npx npm-check-updates'
 alias ntree='tree -I "font|img|node_modules" .'
 alias nclean='find . -type d -name "node_modules" -exec rm {} +'
-alias nalias='alias | egrep "npm|node" | sed -E "s/='\''(.+)'\''/\t\1/"'
+alias nalias='alias | egrep "npm|node" | __alias_regex_replace | __alias_regex_beautify'
 
 # Git
 alias gco='git commit -m'
@@ -41,6 +51,7 @@ gcll() {
 }
 alias ga='git add'
 alias gb='git branch'
+alias gbc='git branch --show-current'
 alias gd='git diff'
 alias gdiff='git diff'
 alias glog='git log'
@@ -53,13 +64,15 @@ alias gpdev='git push -u origin dev'
 alias gpmain='git push -u origin main'
 alias gpdevmain='git push -u origin dev:main'
 alias grm='git rm --cached'
+alias grl='git rev-list --all'
+alias grs='git remote show'
 alias gsearch='sh -c '\''git grep $1 $(git rev-list --all)'\'' _'
 alias gisearch='sh -c '\''git grep -i $1 $(git rev-list --all)'\'' _'
 alias gesearch='sh -c '\''git grep -e $1 $(git rev-list --all)'\'' _'
 alias gstat='git status'
 alias gsw='git switch'
 alias gup='git update-index --no-assume-unchanged'
-alias galias='alias | grep git | sed -E "s/='\''(.+)'\''/\t\1/"'
+alias galias='alias | grep git | __alias_regex_replace | __alias_regex_beautify'
 
 # Docker
 alias dbuild='docker build .'
@@ -134,7 +147,7 @@ alias sha3-256sum='openssl dgst -sha3-256'
 alias shake256sum='openssl dgst -shake-256'
 alias ssh-fingerprints='sh -c '\''find /etc/ssh ~/.ssh/ -iname "*$1*.pub" -exec ssh-keygen -l -E ${2:-sha256} -f {} \;'\'' _'
 
-alias aalias='alias | sed -E "s/='\''(.+)'\''/ \1/"'
+alias aalias='alias | __alias_regex_replace | __alias_regex_beautify'
 
 alias gchanges='sh -c '\''git diff --name-only HEAD ${1:-HEAD^}'\'' _'
 alias gschanges='sh -c '\''git diff --name-only HEAD ${1:-HEAD^} | egrep "^(\w*(\.(([jt]sx{0,1})|(yml)|(jsonc{0,1}))$)|(Dockerfile)|((src)|(test)|(\.well-known)|(cron)|(public)\/)$2)"'\'' _'
