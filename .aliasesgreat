@@ -1,0 +1,656 @@
+# Node
+alias start='npm start'
+alias dev='npm run dev'
+alias npi='npm install'
+alias npmi='npm install'
+alias npu='npm uninstall'
+alias npmu='npm uninstall'
+alias npr='npm run'
+alias npmr='npm run'
+alias yadd='yarn add'
+alias yrem='yarn remove'
+alias submit='npm run submit'
+alias npup='npx npm-check-updates'
+alias npxup='npx npm-check-updates'
+alias ntree='tree -I "font|img|node_modules" .'
+alias nclean='find . -type d -name "node_modules" -exec rm {} +'
+alias nalias='alias | egrep "npm|node" | sed -E "s/='\''(.+)'\''/\t\1/"'
+
+# Git
+alias gco='git commit -m'
+alias gch='git checkout'
+alias gchours='git checkout --ours'
+alias gchtheirs='git checkout --theirs'
+alias gcl='git clone'
+gcll() {
+	projname="${@: -1}"
+	projurl="${@: -2}"
+	arr=("${@[@]}")
+	unset 'arr[${#arr[0]}-1]'
+	if [[ "$projurl" != "http*" ]]; then
+		projurl="$projname"
+		projname="${projurl##*/}"
+		projname="${projname%.git}"
+	else
+		unset 'arr[${#arr[0]}-1]'
+	fi
+	# echo "$projurl" "$projname"
+	# echo clone $arr "$projurl" "$projname"
+	git clone $arr "$projurl" "$projname"
+	cd "$projname"
+}
+alias ga='git add'
+alias gb='git branch'
+alias gd='git diff'
+alias gdiff='git diff'
+alias glog='git log'
+alias pull='git pull'
+alias gp='git push'
+alias gpr='git push "$(git remote show)"'
+alias gpc='git push "$(git remote show)" "$(git branch --show-current)"'
+alias gr='git remote'
+alias gpdev='git push -u origin dev'
+alias gpmain='git push -u origin main'
+alias gpdevmain='git push -u origin dev:main'
+alias grm='git rm --cached'
+alias gsearch='sh -c '\''git grep $1 $(git rev-list --all)'\'' _'
+alias gisearch='sh -c '\''git grep -i $1 $(git rev-list --all)'\'' _'
+alias gesearch='sh -c '\''git grep -e $1 $(git rev-list --all)'\'' _'
+alias gstat='git status'
+alias gsw='git switch'
+alias gup='git update-index --no-assume-unchanged'
+alias galias='alias | grep git | sed -E "s/='\''(.+)'\''/\t\1/"'
+
+# Docker
+alias dbuild='docker build .'
+alias dbtag='docker build . -t'
+alias dcls='docker container ls'
+alias dc='docker compose'
+alias dcup='docker compose up'
+alias dls='docker ps'
+alias dlss='docker ps --size'
+alias dps='docker ps'
+alias dpss='docker ps --size'
+alias drun='docker run -t'
+
+# Misc
+## Modified default
+alias curl='curl -#'
+alias dd='dd status=progress'
+alias sdd='sudo dd status=progress'
+alias objdump='objdump -M intel --disassembler-color=on'
+alias rsync='rsync -ah --info=progress2'
+
+## Finding & Listing
+alias lb='ls /bin /usr/bin /usr/local/bin $HOME/.local/bin | sort | uniq | column'
+alias lc='echo $?'
+alias le='ls -A | grep .env | column'
+alias lss='sh -c '\''du -d${2:-99999} -ah $1 | sort -hr | less'\'' _'
+alias lookup='GREP_COLORS="ms=0:mc=0" sh -c '\''grep -rnw --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.build --exclude-dir=.next --exclude=package*.json --exclude=*.pdf --color=auto -E ".*$1.*" "${2:-.}"'\'' _'
+alias ilookup='sh -c '\''grep -rnw --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.build --exclude-dir=.next --exclude=package*.json --exclude=*.pdf --color=auto -iE ".*$1.*" "${2:-.}"'\'' _'
+alias wlookup='grep -rnw --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.build --exclude-dir=.next --exclude=package*.json --exclude=*.pdf --color=auto -E'
+alias iwlookup='grep -rnw --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.build --exclude-dir=.next --exclude=package*.json --exclude=*.pdf --color=auto -iE'
+alias iwclookup='grep -rnw --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.build --exclude-dir=.next --exclude=package*.json --exclude=*.pdf --color=auto -iocE'
+alias pdflookup='pdfgrep -Rn'
+alias ipdflookup='pdfgrep -Rni'
+alias izlookup='sh -c '\''find "${2:-.}" -iname "*.gz" -exec zgrep -ai "$1" "{}" \;'\'' _'
+
+# alias cpdflookup='sh -c '\''pdfgrep -Rc "$1" $2 $3 | egrep -v ":0$" | sed -e :a -e "s/\:\d\{1,3\}\$/0&/;ta"'\'' _'
+# cpdflookup() {
+# 	local spath="${1:-.}"
+# 	shift
+# 	for match in $(pdfgrep -Rc "$spath" $@); do
+# 		if ! [[ "$match" =~ :0$ ]]; then
+# 			# echo "$match"
+# 			filepath="$(echo -n $match | sed -E 's/^(.+)\:[0-9]+$/\1/g')"
+# 			number="$(echo -n $match | sed -E 's/^.+\:([0-9]+)$/\1/g')"
+# 			printf "%-3d %s\n" "$number" "$filepath"
+# 		fi
+# 	done
+# }
+
+#  | s /\x1b[36m\2 &\x1b[35m\1\x1b[0m/;ta
+
+## Displaying
+alias clr='clear'
+alias cah='highlight'
+alias resize='convert -resize'
+alias logan='sh -c '\''cat "${1:-.}" | cut "-d " -f1,4,7 | egrep -v "/socket.io|/check|/me|/sign-in|/sign-up|/.well-known|/favicon|/robots.txt|/apple-app-site-association|/$" | sort | uniq -w 13 | sed -Erz "s/ \[([0-9]+)\/([a-zA-Z]+)\/([0-9]+):([0-9]+):([0-9]+):([0-9]+)/\t\1 \2 \3 \4:\5/g"'\'' _'
+alias original='alias | grep'
+
+## Managing
+alias emulator-wipe-data='sh -c '\''emulator -avd "$1" -wipe-data'\'' _'
+alias adbpush='sh -c '\''adb push $1 ${2:-/sdcard/Pictures/}'\'' _'
+alias layout='setxkbmap -print | grep keycodes | sed -E "s/.+\((.+)\).+/\1/mg"'
+alias schown='sudo chown -R $USER:$USER'
+alias pipxir='pipx runpip cookiecutter install -r'
+cdd() { mkdir -p "$1" && cd "$1"; }
+
+## Hash
+alias blake2b512sum='openssl dgst -blake2b512'
+alias blake2s256sum='openssl dgst -blake2s256'
+alias keccak256sum='openssl dgst -keccak-256'
+alias sha3-256sum='openssl dgst -sha3-256'
+alias shake256sum='openssl dgst -shake-256'
+alias ssh-fingerprints='sh -c '\''find /etc/ssh ~/.ssh/ -iname "*$1*.pub" -exec ssh-keygen -l -E ${2:-sha256} -f {} \;'\'' _'
+
+alias aalias='alias | sed -E "s/='\''(.+)'\''/ \1/"'
+
+alias gchanges='sh -c '\''git diff --name-only HEAD ${1:-HEAD^}'\'' _'
+alias gschanges='sh -c '\''git diff --name-only HEAD ${1:-HEAD^} | egrep "^(\w*(\.(([jt]sx{0,1})|(yml)|(jsonc{0,1}))$)|(Dockerfile)|((src)|(test)|(\.well-known)|(cron)|(public)\/)$2)"'\'' _'
+
+alias ip-local='ip -4 -o -c=never a | egrep "wlan|eth" | cut "-d " -f7 | cut "-d/" -f1'
+alias ip-iface='ip -4 -o -c=never a | egrep "wlan|eth" | cut "-d " -f2'
+alias expand-url='sh -c '\''curl -i $@ -s | grep -i location | cut "-d " -f2-'\'' _'
+alias cd..='cd ..'
+
+## FFMpeg
+alias ffmpeg-cut='sh -c '\''ffmpeg -ss "$3" -t "$4" -i "$2" -vcodec copy -acodec copy "$1"'\'' _'
+ffmpeg-merge() {
+	output="$1"
+	shift
+
+	touch .pipeline.txt
+	for input in $@; do
+		echo "file '$input'" >> .pipeline.txt
+	done
+	ffmpeg -f concat -safe 0 -i .pipeline.txt -map 0 -codec copy "$output"
+	# rm .pipeline.txt
+}
+alias ffmpeg-img='sh -c '\''ffmpeg -loop 1 -f image2 -i "$2" -c:v libx264 -t "$3" "$1"'\'' _'
+
+ffmpeg-overlay() {
+	ffmpeg -i "$2" -i "$3" -filter_complex "overlay=main_w-overlay_w:main_h-overlay_h:enable='between(t,$4,$5)'" -preset fast -c:a copy "$1"
+}
+
+ffmpeg-build() {
+	output="$1"
+	inputs=()
+	shift
+
+	for ((i = 1 ; i < $# + 1 ; i++)); do
+		input=${@[$i]}
+
+		echo "Input: $input"
+
+		# for input in $@; do
+		if [[ "$input" =~ .(jpg|jpeg|png|bmp|webp)$ ]]; then
+			duration=5
+			
+			if [[ ${@[((i + 1))]} =~ ^[0-9]+$ ]]; then
+				duration=${@[((i + 1))]}
+				((i++))
+			fi
+			echo "$duration"
+
+			ffmpeg-img "$i-$output" "$input" "$duration" &> /dev/null
+
+			inputs+=("$i-$output")
+		elif [[ "$input" =~ .(avi|mp4|mov|mkv)$ ]]; then
+			inputs+=("$i-$output")
+		fi
+	done
+	ffmpeg-merge "$output" $inputs
+}
+
+watermark() {
+	if [[ "$1" == "" ]]; then
+		echo "Error: Watermark text and file missing" >& 2
+		echo "Usage: $0 <watermark> <file>" >& 2
+		return 1
+	elif [[ "$2" == "" ]]; then
+		echo "Error: File missing" >& 2
+		echo "Usage: $0 <watermark> <file>" >& 2
+		return 1
+	fi
+	if [ -f "$2" ]; then
+		magick -size 260x120 xc:none -fill grey \
+		-gravity NorthWest -draw "translate 10,10 rotate -15 text 10,10 '$1'" \
+		-gravity SouthEast -draw "translate 10,10 rotate -15 text 5,15 '$1'" \
+		miff:- | \
+		magick composite -tile - "$2" $(echo "$2" | sed -E 's/\.([a-zA-Z]{3,4})/-wmark\.\1/ig')
+	elif [ -d "$2" ]; then
+		find "$2" -type f \
+			-regex '.*\.\(png\|jpeg\|jpg\|bmp\|webp\)$' \
+			-exec sh -c "magick -size 260x120 xc:none -fill grey \
+				-gravity NorthWest -draw \"translate 10,10 rotate -15 text 10,10 '$1'\" \
+				-gravity SouthEast -draw \"translate 10,10 rotate -15 text 5,15 '$1'\" \
+				miff:- | \
+				magick composite -tile - '{}' \"\$(echo '{}' | sed -E 's/\.([a-zA-Z]{3,4})/-wmark\.\1/ig')\"" \;
+	else
+		echo "Error: '$2' isn't a file nor a directory" >& 2
+	fi
+}
+
+shred-folder() {
+	if [[ "$1" == "" ]]; then
+		echo "Error: Folder missing" >& 2
+		return 1
+	fi
+	folder="$1"
+	shift
+	find "$folder" -type f -exec shred -vu $@ {} \;
+	find "$folder" -type d -empty -delete
+}
+
+vpn-exception() {
+    local action="$1"
+    if [[ "$action" == "" ]]; then
+        echo "Error: Action missing" >& 2
+        echo "Usage: $0 { add | del | reset | get } { <IPv4> | <domain> }"
+        return 1
+    elif [[ "$action" != "add" && "$action" != "del" && "$action" != "reset" && "$action" != "get" ]]; then
+        echo "Error: Unknown action '$action'" >& 2
+        echo "Usage: $0 { add | del | reset | get } { <IPv4> | <domain> }"
+        return 1
+    elif [[ "$2" == "" && ( "$action" == "add" || "$action" == "del" ) ]]; then
+        echo "Error: Host missing" >& 2
+        echo "Usage: $0 { add | del | reset | get } { <IPv4> | <domain> }"
+        return 1
+    fi
+
+    local host="$2"
+    local iface=$(ip -4 -o -c=never a | egrep "wlan|eth")
+    local iface_ip=$(echo "$iface" | cut "-d " -f7 | cut "-d/" -f1)
+    local iface_name=$(echo $iface | cut "-d " -f2)
+    local n=0
+    
+    case "$action" in
+        add|del)
+            if [[ "$host" =~ ^(([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))\.){3}([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))$ ]]; then
+                sudo ip route $action "$host" via "$iface_ip" dev "$iface_name"
+            else
+                for ip in $(host -t a $host | grep "has address" | cut -f4 '-d ' | tr '\n' ' '); do
+                    sudo ip route $action "$ip" via "$iface_ip" dev "$iface_name"
+                    if [[ $? == 0 ]]; then
+                        printf "%s\e[0m \e[35m$ip\e[0m via \e[35m$iface_ip\e[0m dev \e[36m$iface_name\e[0m\n" $([ "$action" == "add" ] && echo "\e[32;1m+" || echo "\e[31;1m-")
+                    fi
+                    ((n++))
+                done
+                if [[ $n == 0 ]]; then
+                    echo "Error: Could not find any IPv4 for '$host'" >& 2
+                    return 1
+                fi
+            fi
+            ;;
+        reset)
+            for ip in $(ip route | grep "$iface_ip dev $iface_name" | cut '-d ' -f1); do
+                sudo ip route del "$ip" via "$iface_ip" dev "$iface_name"
+                if [[ $? == 0 ]]; then
+                    echo "\e[31;1m-\e[0m \e[35m$ip\e[0m via \e[35m$iface_ip\e[0m dev \e[36m$iface_name\e[0m"
+                fi
+                ((n++))
+            done
+            if [[ $n == 0 ]]; then
+                echo "No exception found: nothing to do" >& 2
+                return 1
+            fi
+            ;;
+        get)
+            for ip in $(ip route | grep "$iface_ip dev $iface_name" | cut '-d ' -f1); do
+                echo "\e[35m$ip\e[0m via \e[35m$iface_ip\e[0m dev \e[36m$iface_name\e[0m"
+                ((n++))
+            done
+            if [[ $n == 0 ]]; then
+                echo "No exception found"
+            fi
+            ;;
+    esac
+}
+shell-colour() {
+	256_colours() {
+		printf "\e[4m8-bit 256-colours (6x6x6)\e[0m \e[2m(non-standard)\e[0m\n"
+		for ((bright = 0 ; bright < 16 ; bright++)); do
+			printf "\e[48;5;%im %03i \e[0m" $bright $bright
+			if (( bright % 6 == 5)); then
+				echo
+			fi
+		done
+		echo
+		for ((red = 0 ; red < 6 ; red++)); do
+			for ((green = 0 ; green < 6 ; green++)); do
+				for ((blue = 0 ; blue < 6 ; blue++)); do
+					colour=(( 16 + (red * 36) + green * 6 + blue ))
+					printf "\e[48;5;%im %03i \e[0m" $colour $colour
+				done
+				echo
+			done
+		done
+		for ((bright = 232 ; bright < 256 ; bright++)); do
+			printf "\e[48;5;%im %03i \e[0m" $bright $bright
+			if (( bright % 6 == 3)); then
+				echo
+			fi
+		done
+		echo
+		echo "  16 + (RED*36) + (GREEN*6) + BLUE"
+		printf '  \\e[<38|48>;5;\e[1m<colour>\e[0mm\n'
+	}
+	rgb_colours() {
+		printf "\e[4m24-bit RGB colours\e[0m \e[2m(non-standard)\e[0m\n"
+		printf '  \\e[<38|48>;2;\e[1m<RED>\e[0m;\e[1m<GREEN>\e[0m;\e[1m<BLUE>\e[0mm\n'
+	}
+	extended_footer() {
+		echo
+		echo "  Foreground  38"
+		echo "  Background  48"
+	}
+	case "$1" in
+		"-256")
+			256_colours
+			;;
+		"-rgb")
+			rgb_colours
+			;;
+		"-x")
+			256_colours
+			echo
+			rgb_colours
+			;;
+		"-h"|"-?"|"--help")
+			printf "\e[4mUsage:\e[0m $0 { -256 | -rgb | -x }\n"
+			echo
+			echo "  -l    4-bit legacy colours and style"
+			echo "  -256  8-bit extended 256 colours (non-standard)"
+			echo "  -rgb  24-bit extended RGB colours (non-standard)"
+			echo "  -x    All extended colours (non-standard)"
+			echo
+			echo "  -h --help  Show this help"
+			echo "  -?    Alias for -h"
+			echo
+			echo "Note: No parameter will print legacy colours"
+			return 0
+			;;
+		"-l"|"")
+			show_list() {
+				local title=$1
+				local i=$2
+				shift 2
+
+				printf "\e[4m${title}\e[0m\n"
+				if (( i >= 30 )); then
+					printf "  DEFAULT      %i\n" ((i+9))
+					printf "               \e[4mNormal\e[0m      \e[4mBright (non-standard)\e[0m\n"
+				fi
+				for c in "$@"; do
+					if (( i == 8 )); then
+						printf "  %-16s %i  \e[%im%-8s\e[0m\n" "$c" $i $i "Lorem Ipsum"
+					elif (( i < 30 )); then
+						printf "  \e[%im%-16s %i  %-8s\e[0m\n" $i "$c" $i "Lorem Ipsum"
+					else
+						printf "  \e[%im%-12s %i %-8s \e[%im%i %-9s\e[0m\n" $i "$c" $i "Lorem" ((i+60)) ((i+60)) "Lorem"
+					fi
+					((i++))
+				done
+				if (( i < 30 )); then
+					printf "  DOUBLE_UNDERLINE 21 \e[21mLorem Ipsum\e[0m\n"
+				fi
+				echo
+			}
+			style=("NORMAL/RESET" "BOLD" "DIM" "ITALIC" "UNDERLINE" "BLINK" "BLINK_FAST" "REVERSE" "HIDE" "STRIKE")
+			show_list "Style" 0 $style
+
+			colour=("BLACK" "RED" "GREEN" "YELLOW" "BLUE" "MAGENTA" "CYAN" "WHITE")
+			show_list "Foreground" 30 $colour
+			show_list "Background" 40 $colour
+			printf '  \e[2m4-bit\e[0m \e[2m(Legacy)\e[0m\n'
+			return 0
+			;;
+		*)
+			printf "\e[31mError\e[0m: Unknown argument $1\n" >&2
+			printf "Type '$0 -h' for more information\n" >&2
+			return 1
+			;;
+	esac
+	extended_footer
+}
+alias shc='shell-colour'
+# dpdflookup() {
+# 	local text="$1"
+# 	local _path="."
+# 	shift
+# 	if [[ $1 != '' ]]; then
+# 		_path="$1"
+# 		shift
+# 	fi
+
+# 	find ${_path} $@ -name '*.pdf' -exec sh -c "pdftotext -nopgbrk '{}' - | sed -Erz 's/([a-zA-Z0-9 _–-])\n/\1/g' | grep --with-filename --label='{}' --color '${text}'" \;
+# }
+# mvsed() {
+# 	local _regex="$1"
+# 	local _path="."
+# 	shift
+# 	if [[ $1 != '' ]]; then
+# 		_path="$1"
+# 		shift
+# 	fi
+# 	find ${_path} $@ -not -name '.' -exec sh -c 'echo "{}" $(echo {} | sed -Erz "s/([.\[\]\(\)*^$+?{|])/\\1/g; '${_regex}'")' \;
+# }
+cheat-sheet() {
+	# Regex
+	echo "UUID:            /^([0-9a-f-]{36})$/i"
+	echo "Email (max 254): /^[a-z0-9\._-]{1,190}@[a-z0-9\._-]{1,54}\.[a-z0-9]{1,8}$/i     <[name 192]@[domain 64]>"
+	echo "Phone (compact): /^(\+?[0-9]{1,3}|0)([0-9]{7,9})$/                            (+)[country 3][personal 9]"
+	echo "Password:        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,128}$/u          1 digit, 1 lower & upper letter, 1 symbol, length between 8 and 128 characters"
+	echo "Hash (hex):      /^([[:xdigit:]]{8}){4,8}|([[:xdigit:]]{32}){3,4}$/           160, 192, 224, 256, 384 and 512bits"
+}
+round-img() {
+	if [ ! -f "$1" ]; then
+		echo "No such file '$1'" >&2
+		return 1
+	fi
+	local width=$(identify -format '%w' "$1")
+	local height=$(identify -format '%h' "$1")
+	local filename=$(echo "${1%.*}")
+	local ext=$(echo "${$(basename -- "$1")##*.}")
+	local round_px=0
+	local round_ratio=${2:-10}
+	if (( width > height )); then
+		round_px=$(( height / round_ratio ))
+	else
+		round_px=$(( width / round_ratio ))
+	fi
+
+	maskname=".mask.png"
+
+	convert -size "${width}x${height}" xc:none -draw "roundrectangle 0,0,${width},${height},${round_px},${round_px}" "$maskname"
+	convert "$1" -matte "$maskname" -compose DstIn -composite "$filename-rounded.$ext"
+	rm "$maskname"
+}
+alias rimg='round-img'
+
+pad() {
+	awk 'BEGIN {FS=OFS="'"${2:=~}"'"} {$1 = sprintf("  \x1b[36;1m%-'"${1:=32}"'s\x1b[0m", $1)} 1'
+}
+alias cpdflookup='sh -c '\''pdfgrep -Rc $@ | egrep -v ":0$" | pad 4 '\'' _'
+
+# Insensitive AND grep
+iagrep() {
+	local __geval="grep -i $1"
+
+	shift
+	for gcmd in $@; do
+		__geval+=" | grep -i $gcmd"
+	done
+	eval $__geval
+}
+
+# Search within manual
+msearch() {
+	man -k "$@" | grep "(1)" | iagrep "$@" | cut "-d " -f1,3- | sed -Erz 's/- / ~ /g' | pad 4
+}
+
+# Search within (uninstalled) packages
+asearch() {
+	apt search "$@" 2> /dev/null | sed -Erz 's/Full Text Search\.\.\.//g; s/\n([a-zA-Z0-9_.-]+)\/kali-rolling(([a-zA-Z0-9 ,:+.-]|\[|\])+)/\1/g' | sed -Erz 's/\n  / ~ /g' | iagrep "$@" | pad 18
+}
+
+# Search within manual and packages
+search() {
+	printf "\e[1;4mManual:\e[0m\n"
+	msearch $@
+
+	printf "\n\e[1;4mPackages:\e[0m\n"
+	asearch $@
+}
+
+push() {
+	if [[ "$1" == "" ]]; then
+		echo "No comment specified" >&2
+		echo "Usage: $0 <comment> file..."
+		return 1
+	elif [[ "$2" == "" ]]; then
+		echo "No file specified" >&2
+		echo "Usage: $0 <comment> file..."
+		return 1
+	fi
+	comment="$1"
+	shift
+	git add $@
+	if [ $? -ne 0 ]; then
+		return 1
+	elif [[ $(git status) == *"nothing"* ]]; then
+		echo "Already up to date."
+		return 0
+	fi
+	git status
+	git commit -m "$comment"
+	git push
+}
+
+update-zsh() {
+	cd "$ENHANCED_PATH"
+	if [ -d "$folder" ]; then
+		cd $folder
+		git_pull=$(git pull origin main 2> /dev/null)
+		echo $git_pull
+		
+		if [[ $? -ne 0 || $git_pull == *"Already up to date"* ]]; then
+			return 0
+		elif [[ $git_pull == *"vscode"* || $git_pull == *"gnome-terminal-profiles"* || $git_pull == *"import.sh"* || $git_pull == *"fonts"* || $git_pull == *"libre-office"* ]]; then
+			./import.sh
+		else
+			./import-zsh.sh
+		fi
+	else
+		git clone https://github.com/MikeCod/EnhancedTerminal.git $folder
+		if [ $? -ne 0 ]; then
+			return 0
+		fi
+		cd $folder
+		./import.sh
+	fi
+    
+
+	echo "Run the command below to update your current terminal:
+	. ~/.zshrc
+	"
+}
+
+help-recovery() {
+	printf "\e[4mUsual recovery tools:\e[0m
+  cryptsetup    Encrypt Drive to LUKS
+  curl          Download
+  dd            Copy source to destination
+  fdisk         Drives details
+  lsblk         Drive listing
+  man           READ THE FUCKING MANUAL
+  mkfs          Format partition
+  search Search in manual (first page) and packages
+  help [<text>] Show this help,
+                Or search in manual (first page) if an argument is given
+
+  mount <source> <mountpoint> Mount partition
+  umount <mountpoint>         Unmount partition
+
+\e[4mUsual files:\e[0m
+  /dev/zero     Null byte
+  /dev/random   Random byte"
+}
+help() {
+	if [[ $1 != "" ]]; then
+		search $1
+		return 0
+	fi
+	printf "\e[4mUseful commands:\e[0m
+  alias             Display all aliases
+  curl              Download
+  dd                Copy source to destination
+  fdisk             Drives details
+  lb                Command listing (alias)
+  le                Env files listing (alias)
+  [i][w]lookup      Search a text within files of the current folder
+                    and all sub-folders
+  lsblk             Drive listing
+  jq                JSON format and filter
+  man               READ THE FUCKING MANUAL
+  mkfs              Format partition
+  original          Filter aliases
+  pdfunite          Merge multiple PDF
+  [a|m]search       Search for something in manual and/or packages
+  tesseract-ocr     Extract text from image.
+
+  help              Show this help,
+                    Or search in manual (first page) if an argument is given
+
+\e[4mUsual files:\e[0m
+  /dev/zero     Null byte
+  /dev/random   Random byte"
+}
+git-convention() {
+	printf "\e[4mGit conventional types:\e[0m
+	
+  \e[36;1mbuild\e[0m     Changes that affect the build system or external dependencies (e.g. gulp, npm)
+  \e[36;1mchore\e[0m     Other changes that don't modify src or test files
+   └─ \e[36;1mmeta\e[0m      Metadata changes (e.g. version)
+  
+  \e[36;1mdocs\e[0m      Documentation only changes
+  \e[36;1mfeat\e[0m      New feature
+  \e[36;1mfix\e[0m       Bug Fixes
+  \e[36;1mops\e[0m       Operational components (e.g. infrastructure, deployment, etc.)
+   ├─ \e[36;1mci\e[0m        Changes to our CI configuration files and scripts (e.g. Travis, Circle)
+   └─ \e[36;1mrevert\e[0m    Reverts a previous commit
+  
+  \e[36;1mrefactor\e[0m  A code change that neither fixes a bug nor adds a feature
+   └─ \e[36;1mperf\e[0m      Performance Improvements
+  
+  \e[36;1mstyle\e[0m     Changes that do not affect the meaning of the code (white-space, formatting, etc)
+  \e[36;1mtest\e[0m      Adding missing tests or correcting existing tests
+
+
+ \e[1m<type>(<scope>): <short summary>\e[0m
+  │      │         └── \e[4mSummary\e[0m in present tense. Not capitalized. No dot at the end.
+  │      └── \e[4mScope:\e[0m animations|app.json|common ...
+  └── \e[4mType:\e[0m build|ci|docs|feat ...
+
+
+\e[4mThe scope provides additional contextual information (Optional)\e[0m
+  - Allowed Scopes depends on the specific project
+  - Don't use issue identifiers as scopes
+
+\e[4mBreaking Changes Indicator (Optional)\e[0m
+   Indicated by \e[1m!\e[0m before the \e[1m:\e[0m in the subject line e.g. feat(api)!: remove status endpoint
+"
+}
+alias gitc='git-convention'
+
+repair() {
+	case "$1" in
+		"dock")
+			sudo apt remove gnome-shell-extension-dashtodock
+			;;
+		"vpn")
+			# Disable kill switch
+			local device=$(nmcli d | grep vpn | cut '-d ' -f1)
+			nmcli d delete "$device"
+			if [ $? -ne 0 ]; then
+				echo "Couldn't disable kill switch" >&2
+				return 1
+			fi
+			echo "You can now install VPN back:"
+			echo "  sudo apt install proton-vpn-gnome-desktop"
+			;;
+		"")
+			;;
+	esac
+}
